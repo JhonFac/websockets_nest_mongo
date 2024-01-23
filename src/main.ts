@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-console.log('Inicia el proceso')
-console.log($PORT)
+console.log('Inicia el proceso');
+console.log(process.env.PORT);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // await app.listen(3000);
-  await app.listen($PORT);
+  await app.listen(process.env.PORT || 3000);
 }
+
 bootstrap();
