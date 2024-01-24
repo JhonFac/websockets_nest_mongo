@@ -8,6 +8,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { TodoService } from '../todo/todo.service';
 
 @WebSocketGateway({
   cors: {
@@ -17,6 +18,8 @@ import { Server, Socket } from 'socket.io';
 export class WebsocketGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private readonly todoService: TodoService) {}
+
   @WebSocketServer()
   server: Server;
 
@@ -29,10 +32,16 @@ export class WebsocketGateway
   }
 
   @SubscribeMessage('mensaje')
-  handleMessage(@ConnectedSocket() client: Socket, @MessageBody() data: any) {
+  async handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: any,
+  ) {
     console.log(data);
-    // this.server.emit('mensaje', data);
-    console.log(client.id);
-    client.broadcast.emit('mensaje', data);
+    const createdTodo = await this.todoService.create(data);
+    console.log('guardado');
+    console.log(createdTodo);
+    // client.broadcast.emit('mensaje', createdTodo);
+    // También puedes emitir a todos los clientes, incluido el que envió el mensaje original
+    // this.server.emit('mensaje', createdTodo);
   }
 }
