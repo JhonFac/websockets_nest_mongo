@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { WebsocketGateway } from './websocket.gateway';
-import { TodoService } from '../todo/todo.service';
+import { CodeService } from './websocket.service';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { Todo, TodoSchema } from '../todo/schemas/todo.schema';
@@ -14,6 +14,6 @@ import { Todo, TodoSchema } from '../todo/schemas/todo.schema';
       },
     ]),
   ],
-  providers: [WebsocketGateway, TodoService],
+  providers: [WebsocketGateway, CodeService],
 })
 export class GatewayModule {}

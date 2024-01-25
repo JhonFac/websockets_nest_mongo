@@ -39,7 +39,32 @@ export class TodoService {
 @Injectable()
 export class CodeService {
   constructor(@InjectModel(Todo.name) private todoModel: Model<Todo>) {}
+
+  async create(todo: CreateTodoDto) {
+    const createdTodo = new this.todoModel(todo);
+    return createdTodo.save();
+  }
+
   async findLatest() {
     return this.todoModel.findOne().sort({ _id: -1 }).exec();
+  }
+
+  async update(title: string, todo: UpdateTodoDto) {
+    return this.todoModel
+      .findOneAndUpdate({ title }, todo, {
+        new: true,
+      })
+      .exec();
+  }
+  async findOne(title: string) {
+    return this.todoModel.findOne({ title }).exec();
+  }
+
+  async updateByTitle(title: string, todo: UpdateTodoDto) {
+    return this.todoModel
+      .findOneAndUpdate({ title }, todo, {
+        new: true,
+      })
+      .exec();
   }
 }

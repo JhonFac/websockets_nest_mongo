@@ -8,7 +8,7 @@ import {
   Delete,
   Param,
 } from '@nestjs/common';
-
+import { ApiTags } from '@nestjs/swagger';
 import { TodoService, CodeService } from './todo.service';
 import { CreateTodoDto } from './dtos/create-todo.dto';
 import { UpdateTodoDto } from './dtos/update-todo.dto';
@@ -53,5 +53,11 @@ export class CodeController {
   @Get()
   async findLatest() {
     return this.code.findLatest();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const result = await this.code.findOne(id);
+    return result ? result : NaN;
   }
 }
